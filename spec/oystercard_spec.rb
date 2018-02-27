@@ -17,24 +17,26 @@ describe Oystercard do
       expect { subject.touch_in }.to raise_error "Insufficient funds"
     end
   end
-  describe '#deduct' do
-    it 'can deduct from a balance' do
+    it 'is initially not in a journey' do
+    expect(subject).not_to be_in_journey
+  end
+  describe '#touch_in' do
+    it 'can touch in' do
       subject.top_up(10)
-      expect { subject.deduct 1 }.to change { subject.balance }.by -1
+      subject.touch_in
+      expect(subject).to be_in_journey
     end
   end
-  it 'is initially not in a journey' do
-    expect(subject).not_to be_in_journey
-  end
-  it 'can touch in' do
-    subject.top_up(10)
-    subject.touch_in
-    expect(subject).to be_in_journey
-  end
-  it 'can touch out' do
-    subject.top_up(10)
-    subject.touch_in
-    subject.touch_out
-    expect(subject).not_to be_in_journey
+  describe '#touch_out' do
+    it 'can touch out' do
+      subject.top_up(10)
+      subject.touch_in
+      subject.touch_out
+      expect(subject).not_to be_in_journey
+    end
+    it 'deducts minimum fare' do
+      subject.top_up(10)
+      expect { subject.touch_out }.to change { subject.balance }.by(-Oystercard::MINIMUM_FARE)
+    end
   end
 end
