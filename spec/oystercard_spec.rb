@@ -50,7 +50,7 @@ describe Oystercard do
   it 'deducts minimum fare' do
     subject.top_up(10)
     subject.start_journey(entry_station)
-    expect { subject.end_journey(exit_station) }.to change { subject.balance }.by(-Oystercard::MINIMUM_FARE)
+    expect { subject.end_journey(exit_station) }.to change { subject.balance }.by(-Journey::MINIMUM_FARE)
   end
   end
 end
