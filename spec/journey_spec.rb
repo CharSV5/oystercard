@@ -15,6 +15,7 @@ describe Journey do
     it 'ends the journey' do
       subject.touch_in('Kilburn')
       subject.touch_out('Hampstead')
+      subject.complete_journey
       expect(subject).not_to be_in_journey
     end
   end

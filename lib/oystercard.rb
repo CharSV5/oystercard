@@ -24,11 +24,15 @@ class Oystercard
   end
 
   def end_journey(station)
-    deduct(MINIMUM_FARE)
     @journey_class.touch_out(station)
     @journeys.push(journey_class.journey_entry)
+    deduct(fare)
+    @journey_class.complete_journey
   end
 
+  def fare
+    @journey_class.exit_station.nil? || @journey_class.entry_station.nil? ? 6 : 1
+  end
 
   private
     def deduct(amount)
