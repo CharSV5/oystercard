@@ -29,6 +29,7 @@ class Oystercard
     @journeys.push(journey_class.journey_entry)
   end
 
+
   private
     def deduct(amount)
     @balance -= amount
