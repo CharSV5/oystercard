@@ -1,31 +1,20 @@
+require 'journey'
+
 describe Journey do
-describe '#touch_in' do
-context 'in journey' do
-  before(:each) do
-    subject.top_up(10)
-    subject.touch_in(entry_station)
+  describe '#touch_in' do
+    it 'records an entry_station' do
+      expect(subject.touch_in('Kilburn')).to eq 'Kilburn'
+    end
   end
-  it 'can touch in' do
-    expect(subject).to be_in_journey
+  describe '#touch_out' do
+    it 'records an exiit station' do
+      subject.touch_out('Hampstead')
+      expect(subject.exit_station).to eq 'Hampstead'
+    end
+    it 'creates a journey entry' do
+      subject.touch_in('Kilburn')
+      subject.touch_out('Hampstead')
+      expect(subject.journey_entry).to eq({:entry_station => 'Kilburn', :exit_station => 'Hampstead'})
+    end
   end
-  it 'stores the entry station' do
-    expect(subject.entry_station).to eq entry_station
-  end
-end
-it 'raises an error if touching in with less than the minimum balance' do
-  expect { subject.touch_in(entry_station) }.to raise_error 'Insufficient funds'
-end
-end
-describe '#touch_out' do
-it 'can touch out' do
-  subject.top_up(10)
-  subject.touch_in(entry_station)
-  subject.touch_out(exit_station)
-  expect(subject).not_to be_in_journey
-end
-it 'deducts minimum fare' do
-  subject.top_up(10)
-  expect { subject.touch_out(exit_station) }.to change { subject.balance }.by(-Oystercard::MINIMUM_FARE)
-end
-end
 end

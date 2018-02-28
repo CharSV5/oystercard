@@ -1,5 +1,3 @@
-require_relative 'oystercard'
-
 class Journey
     attr_reader :exit_station, :entry_station, :journey_entry
 
