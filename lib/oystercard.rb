@@ -22,7 +22,7 @@ class Oystercard
 
   def start_journey(station)
     raise "Insufficient funds" if balance < Journey::MINIMUM_FARE
-    journey_log.check_incomplete_journey(station, journey_log) unless journey_log.nil?
+    deduct(journey.fare) unless journey.complete? 
     create_journey
     journey_log.touch_in(station)
   end
