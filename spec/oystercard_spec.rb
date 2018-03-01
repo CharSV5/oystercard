@@ -38,9 +38,10 @@ describe Oystercard do
   describe '#start_journey' do
     # this needs fixing. in_journey is in Journey class, shouldn't be testing that, need doubles
     it 'can start a journey' do
+     journey_class = double 'journey_class', :mid_journey? => true, :touch_in => entry_station
       subject.top_up(10)
-      subject.start_journey(entry_station)
-      expect(subject.journey_class).to be_in_journey
+      subject.start_journey(entry_station, journey_class)
+      expect(subject.journey_class).to be_mid_journey #(change to mid_journey for double)
     end
   end
   it 'raises an error if starting journey with less than the minimum balance' do
@@ -52,5 +53,10 @@ describe Oystercard do
     subject.start_journey(entry_station)
     expect { subject.end_journey(exit_station) }.to change { subject.balance }.by(-Journey::MINIMUM_FARE)
   end
+  end
+  it 'deducts a penalty fare if not touched out' do
+    subject.top_up(10)
+    subject.start_journey(entry_station)
+    expect(subject.journey_class.fare).to eq Journey::PENALTY_FARE
   end
 end
