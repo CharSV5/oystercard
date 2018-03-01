@@ -18,33 +18,15 @@ describe Oystercard do
     end
   end
 
-  describe '#check_incomplete_journey' do
-
-    let(:journey) { { entry_station: entry_station, exit_station: :incomplete } }
-    it 'stores an incomplete journey' do
-      journey_class = double('journey_class', in_journey?: true, fare: Journey::PENALTY_FARE, entry_station: entry_station)
-      subject.check_incomplete_journey(entry_station, journey_class)
-      expect(subject.journeys).to include journey
-    end
-  end
-
   it 'is initially not in a journey' do
-    expect(subject.journey_class).to eq nil
+    expect(subject.journey_log).to eq nil
   end
 
   it 'has an empty list of journeys by default' do
-    expect(subject.journeys).to be_empty
+    expect(subject.journey_log).to eq nil
   end
 
   let(:journey) { { entry_station: entry_station, exit_station: exit_station } }
-
-  it 'stores a journey' do
-    subject.top_up(10)
-    subject.start_journey(entry_station)
-    subject.end_journey(exit_station)
-    subject.journeys.push(journey)
-    expect(subject.journeys).to include journey
-  end
 
   it 'raises an error if starting journey with less than the minimum balance' do
     expect { subject.start_journey(entry_station) }.to raise_error 'Insufficient funds'
