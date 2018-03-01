@@ -27,7 +27,7 @@ class Oystercard
       #    @journeys << {entry_station: journey_class.entry_station, exit_station: :incomplete}
       #   end
       # end
-      check_incomplete_journey
+      check_incomplete_journey(station, journey_class)
     create_journey
     journey_class.touch_in(station)
   end
@@ -39,7 +39,7 @@ class Oystercard
     @journey_class.complete_journey
   end
 
-  def check_incomplete_journey
+  def check_incomplete_journey(station, journey_class)
     if journey_class != nil
       if journey_class.in_journey?
         deduct(journey_class.fare)
